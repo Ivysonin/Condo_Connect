@@ -119,13 +119,15 @@ function showDashboard(section = 'overview') {
         document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
 
         // Mostrar ou ocultar botão "Novo Aviso"
-        const btnNotice = document.getElementById('btnNotice');
-        if (btnNotice) {
-            if (currentUser.type === 'admin') {
-                btnNotice.style.display = 'inline-flex';
-            } else {
-                btnNotice.style.display = 'none';
-            }
+        const btnNotice1 = document.getElementById('btnNotice1');
+        if (btnNotice1) {
+            btnNotice1.style.display = currentUser.type === 'admin' ? 'inline-flex' : 'none';
+        }
+
+        // Mostrar ou ocultar botão "Novo Aviso" no painel de avisos
+        const btnNotice2 = document.getElementById('btnNotice2');
+        if (btnNotice2) {
+            btnNotice2.style.display = currentUser.type === 'admin' ? 'inline-flex' : 'none';
         }
 
         // Mostrar ou ocultar estatísticas administrativas
