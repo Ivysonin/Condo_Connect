@@ -117,6 +117,26 @@ function showDashboard(section = 'overview') {
     // Update user avatar
     if (currentUser) {
         document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+
+        // Mostrar ou ocultar botão "Novo Aviso"
+        const btnNotice = document.getElementById('btnNotice');
+        if (btnNotice) {
+            if (currentUser.type === 'admin') {
+                btnNotice.style.display = 'inline-flex';
+            } else {
+                btnNotice.style.display = 'none';
+            }
+        }
+
+        // Mostrar ou ocultar estatísticas administrativas
+        const adminStats = document.getElementById('adminStats');
+        if (adminStats) {
+            if (currentUser.type === 'admin') {
+                adminStats.style.display = 'grid';
+            } else {
+                adminStats.style.display = 'none';
+            }
+        }
     }
     
     // Hide all dashboard sections
@@ -141,6 +161,13 @@ function showDashboard(section = 'overview') {
     });
     
     currentDashboard = section;
+
+    if (currentUser?.type === 'admin') {
+    updateStats();
+    }
+
+    renderRecentNotices();
+    renderUpcomingReservations();
 }
 
 // Modal functions
@@ -150,6 +177,100 @@ function showLoginModal() {
 
 function showRegisterModal() {
     document.getElementById('registerModal').classList.add('active');
+}
+
+function renderRecentNotices() {
+    const container = document.getElementById('recentNotices');
+    if (!container) return;
+
+    const notices = JSON.parse(localStorage.getItem('condohub_notices')) || [];
+    container.innerHTML = '';
+
+    const recent = [...notices].reverse().slice(0, 5);
+
+    recent.forEach(notice => {
+        const priorityColor = {
+            info: 'bg-blue-500',
+            important: 'bg-green-500',
+            urgent: 'bg-red-500'
+        }[notice.priority] || 'bg-gray-400';
+
+        const timeAgo = formatTimeAgo(notice.createdAt);
+
+        const noticeHTML = `
+            <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <div class="w-4 h-4 ${priorityColor} rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                    <h4 class="font-medium text-gray-900">${notice.title}</h4>
+                    <p class="text-sm text-gray-600">${notice.content}</p>
+                    <span class="text-xs text-gray-500">${timeAgo}</span>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', noticeHTML);
+    });
+}
+
+function renderUpcomingReservations() {
+    const container = document.getElementById('upcomingReservations');
+    if (!container) return;
+
+    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
+    container.innerHTML = '';
+
+    const upcoming = [...reservations]
+        .filter(r => new Date(r.date) >= new Date())
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 5);
+
+    upcoming.forEach(reservation => {
+        const statusColor = {
+            confirmed: 'bg-green-500',
+            pending: 'bg-yellow-500',
+            canceled: 'bg-red-500'
+        }[reservation.status] || 'bg-gray-400';
+
+        const date = formatReservationDate(reservation.date, reservation.startTime, reservation.endTime);
+
+        const reservationHTML = `
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div>
+                    <h4 class="font-medium text-gray-900">${reservation.space}</h4>
+                    <p class="text-sm text-gray-600">${date}</p>
+                </div>
+                <span class="text-xs ${statusColor} text-white px-2 py-1 rounded">
+                    ${capitalize(reservation.status)}
+                </span>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', reservationHTML);
+    });
+}
+
+function formatReservationDate(dateStr, start, end) {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month} - ${start} às ${end}`;
+}
+
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function formatTimeAgo(dateString) {
+    const now = new Date();
+    const created = new Date(dateString);
+    const diffMs = now - created;
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHr = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHr / 24);
+
+    if (diffMin < 1) return 'Agora mesmo';
+    if (diffMin < 60) return `Há ${diffMin} min`;
+    if (diffHr < 24) return `Há ${diffHr} horas`;
+    if (diffDay === 1) return 'Ontem';
+    return `${diffDay} dias atrás`;
 }
 
 function showCreateModal(type) {
@@ -202,10 +323,10 @@ function showCreateModal(type) {
                         <label for="reservationArea" class="form-label">Área Comum</label>
                         <select id="reservationArea" class="form-input form-select" required>
                             <option value="">Selecione...</option>
-                            <option value="party-room">Salão de Festas</option>
-                            <option value="bbq">Churrasqueira</option>
-                            <option value="pool">Piscina</option>
-                            <option value="gym">Academia</option>
+                            <option value="Salão de Festas">Salão de Festas</option>
+                            <option value="Churrasqueira">Churrasqueira</option>
+                            <option value="Piscina">Piscina</option>
+                            <option value="Academia">Academia</option>
                             <option value="playground">Playground</option>
                         </select>
                     </div>
@@ -346,57 +467,68 @@ function handleLogin(event) {
     
     closeModal('loginModal');
     showDashboard();
-    showToast('success', 'Login realizado!', 'Bem-vindo ao CondoHub');
+    showToast('success', 'Login realizado!', 'Bem-vindo ao Condo Connect');
 }
 
 function handleRegister(event) {
     event.preventDefault();
-    
-    const name = document.getElementById('registerName').value;
-    const email = document.getElementById('registerEmail').value;
+
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const phone = document.getElementById('registerPhone').value.trim();
+    const type = document.getElementById('registerType').value;
+    const unit = document.getElementById('registerUnit').value.trim();
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('registerConfirmPassword').value;
-    const type = document.getElementById('registerType').value;
-    const unit = document.getElementById('registerUnit').value;
-    
-    if (password !== confirmPassword) {
-        showToast('error', 'Erro', 'As senhas não coincidem');
+
+    // Validação de nome
+    if (name.length < 3) {
+        showToast('error', 'Nome inválido', 'Digite seu nome completo.');
         return;
     }
-    
-    // Simulate registration
+
+    // Validação de telefone (mínimo 8 dígitos)
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 8) {
+        showToast('error', 'Telefone inválido', 'Digite um telefone válido.');
+        return;
+    }
+
+    // Validação de tipo e unidade
+    if (type === 'resident' && unit === '') {
+        showToast('error', 'Unidade obrigatória', 'Informe sua unidade.');
+        return;
+    }
+
+    // Validação de senha
+    const senhaForte = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!senhaForte.test(password)) {
+        showToast('error', 'Senha fraca', 'A senha deve ter ao menos 6 caracteres, incluindo letras e números.');
+        return;
+    }
+
+    // Confirmação de senha
+    if (password !== confirmPassword) {
+        showToast('error', 'Senhas diferentes', 'As senhas não coincidem.');
+        return;
+    }
+
+    // Simulação de cadastro (substituir com chamada real depois)
     const user = {
         id: Date.now(),
-        name: name,
-        email: email,
-        type: type,
+        name,
+        email,
+        phone,
+        type,
         unit: type === 'resident' ? unit : null
     };
-    
+
     currentUser = user;
     localStorage.setItem('condohub_user', JSON.stringify(user));
-    
+
     closeModal('registerModal');
     showDashboard();
-    showToast('success', 'Cadastro realizado!', 'Conta criada com sucesso. Bem-vindo!');
-}
-
-function loginWithGoogle() {
-    // Simulate Google OAuth
-    const user = {
-        id: Date.now(),
-        name: 'João Silva',
-        email: 'joao.silva@gmail.com',
-        type: 'resident',
-        unit: 'Apto 201 - Bloco A'
-    };
-    
-    currentUser = user;
-    localStorage.setItem('condohub_user', JSON.stringify(user));
-    
-    closeModal('loginModal');
-    showDashboard();
-    showToast('success', 'Login realizado!', 'Conectado via Google');
+    showToast('success', 'Cadastro realizado!', `Bem-vindo, ${user.name}`);
 }
 
 function logout() {
@@ -414,14 +546,53 @@ function createNotice(event) {
     const content = document.getElementById('noticeContent').value;
     const priority = document.getElementById('noticePriority').value;
     const target = document.getElementById('noticeTarget').value;
-    
-    // Simulate creation
+
+    // Recupera avisos existentes ou inicia lista vazia
+    const notices = JSON.parse(localStorage.getItem('condohub_notices')) || [];
+
+    // Cria novo aviso
+    const newNotice = {
+        id: Date.now(),
+        title,
+        content,
+        priority,
+        target,
+        createdAt: new Date().toISOString()
+    };
+
+    // Salva no localStorage
+    notices.push(newNotice);
+    localStorage.setItem('condohub_notices', JSON.stringify(notices));
+
+    // Fecha modal e mostra toast
     closeModal('createModal');
     showToast('success', 'Aviso publicado!', 'Todos os moradores foram notificados');
+
+    // Atualiza dashboard
+    updateStats();
     
-    // Refresh dashboard if on notices
     if (currentDashboard === 'notices') {
         showDashboard('notices');
+    }
+
+    renderRecentNotices();
+}
+
+function updateStats() {
+    const notices = JSON.parse(localStorage.getItem('condohub_notices')) || [];
+    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
+    const ads = JSON.parse(localStorage.getItem('condohub_ads')) || [];
+    const tickets = JSON.parse(localStorage.getItem('condohub_tickets')) || [];
+
+    const adminStats = document.getElementById('adminStats');
+    if (!adminStats) return;
+
+    const statCards = adminStats.querySelectorAll('.stat-card .stat-value');
+    if (statCards.length >= 4) {
+        statCards[0].textContent = notices.length;
+        statCards[1].textContent = reservations.length;
+        statCards[2].textContent = ads.length;
+        statCards[3].textContent = tickets.length;
     }
 }
 
@@ -432,41 +603,40 @@ function createReservation(event) {
     const date = document.getElementById('reservationDate').value;
     const startTime = document.getElementById('reservationStartTime').value;
     const endTime = document.getElementById('reservationEndTime').value;
-    
-    // Simulate validation
+
     const selectedDate = new Date(date);
     const today = new Date();
-    
+    today.setHours(0, 0, 0, 0); // zera hora para comparar só data
+
     if (selectedDate < today) {
         showToast('error', 'Data inválida', 'Não é possível reservar datas passadas');
         return;
     }
-    
-    // Simulate creation
+
+    // Salva no localStorage
+    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
+
+    const newReservation = {
+        id: Date.now(),
+        space: area,
+        date,
+        startTime,
+        endTime,
+        status: 'pending', // padrão inicial
+        createdAt: new Date().toISOString()
+    };
+
+    reservations.push(newReservation);
+    localStorage.setItem('condohub_reservations', JSON.stringify(reservations));
+
     closeModal('createModal');
     showToast('success', 'Reserva confirmada!', 'Você receberá lembrete 24h antes');
-    
-    // Refresh dashboard if on reservations
+
+    updateStats();
+    renderUpcomingReservations();
+
     if (currentDashboard === 'reservations') {
         showDashboard('reservations');
-    }
-}
-
-function createListing(event) {
-    event.preventDefault();
-    
-    const title = document.getElementById('listingTitle').value;
-    const price = document.getElementById('listingPrice').value;
-    const category = document.getElementById('listingCategory').value;
-    const description = document.getElementById('listingDescription').value;
-    
-    // Simulate creation
-    closeModal('createModal');
-    showToast('success', 'Anúncio publicado!', 'Seu item está disponível no marketplace');
-    
-    // Refresh dashboard if on marketplace
-    if (currentDashboard === 'marketplace') {
-        showDashboard('marketplace');
     }
 }
 
@@ -535,12 +705,6 @@ function changeMonth(direction) {
     }
     
     document.getElementById('calendarMonth').textContent = `${monthNames[newMonthIndex]} ${newYear}`;
-}
-
-// Notification functions
-function toggleNotifications() {
-    // Simulate notification panel
-    showToast('info', 'Notificações', 'Você tem 3 notificações não lidas');
 }
 
 function toggleUserMenu() {
