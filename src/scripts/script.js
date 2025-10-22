@@ -167,7 +167,6 @@ function showDashboard(section = 'overview') {
     }
 
     renderRecentNotices();
-    renderUpcomingReservations();
 }
 
 // Modal functions
@@ -209,53 +208,6 @@ function renderRecentNotices() {
         `;
         container.insertAdjacentHTML('beforeend', noticeHTML);
     });
-}
-
-function renderUpcomingReservations() {
-    const container = document.getElementById('upcomingReservations');
-    if (!container) return;
-
-    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
-    container.innerHTML = '';
-
-    const upcoming = [...reservations]
-        .filter(r => new Date(r.date) >= new Date())
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-        .slice(0, 5);
-
-    upcoming.forEach(reservation => {
-        const statusColor = {
-            confirmed: 'bg-green-500',
-            pending: 'bg-yellow-500',
-            canceled: 'bg-red-500'
-        }[reservation.status] || 'bg-gray-400';
-
-        const date = formatReservationDate(reservation.date, reservation.startTime, reservation.endTime);
-
-        const reservationHTML = `
-            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                    <h4 class="font-medium text-gray-900">${reservation.space}</h4>
-                    <p class="text-sm text-gray-600">${date}</p>
-                </div>
-                <span class="text-xs ${statusColor} text-white px-2 py-1 rounded">
-                    ${capitalize(reservation.status)}
-                </span>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', reservationHTML);
-    });
-}
-
-function formatReservationDate(dateStr, start, end) {
-    const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${day}/${month} - ${start} às ${end}`;
-}
-
-function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function formatTimeAgo(dateString) {
@@ -314,43 +266,7 @@ function showCreateModal(type) {
                 </form>
             `;
             break;
-            
-        case 'reservation':
-            titleText = 'Nova Reserva';
-            formContent = `
-                <form onsubmit="createReservation(event)">
-                    <div class="form-group">
-                        <label for="reservationArea" class="form-label">Área Comum</label>
-                        <select id="reservationArea" class="form-input form-select" required>
-                            <option value="">Selecione...</option>
-                            <option value="Salão de Festas">Salão de Festas</option>
-                            <option value="Churrasqueira">Churrasqueira</option>
-                            <option value="Piscina">Piscina</option>
-                            <option value="Academia">Academia</option>
-                            <option value="playground">Playground</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="reservationDate" class="form-label">Data</label>
-                        <input type="date" id="reservationDate" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reservationStartTime" class="form-label">Horário de Início</label>
-                        <input type="time" id="reservationStartTime" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reservationEndTime" class="form-label">Horário de Término</label>
-                        <input type="time" id="reservationEndTime" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reservationNotes" class="form-label">Observações</label>
-                        <textarea id="reservationNotes" class="form-input form-textarea" placeholder="Informações adicionais sobre o evento..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-accent" style="width: 100%;">Solicitar Reserva</button>
-                </form>
-            `;
-            break;
-            
+
         case 'listing':
             titleText = 'Novo Anúncio';
             formContent = `
@@ -580,7 +496,6 @@ function createNotice(event) {
 
 function updateStats() {
     const notices = JSON.parse(localStorage.getItem('condohub_notices')) || [];
-    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
     const ads = JSON.parse(localStorage.getItem('condohub_ads')) || [];
     const tickets = JSON.parse(localStorage.getItem('condohub_tickets')) || [];
 
@@ -588,55 +503,10 @@ function updateStats() {
     if (!adminStats) return;
 
     const statCards = adminStats.querySelectorAll('.stat-card .stat-value');
-    if (statCards.length >= 4) {
+    if (statCards.length >= 3) {
         statCards[0].textContent = notices.length;
-        statCards[1].textContent = reservations.length;
-        statCards[2].textContent = ads.length;
-        statCards[3].textContent = tickets.length;
-    }
-}
-
-function createReservation(event) {
-    event.preventDefault();
-    
-    const area = document.getElementById('reservationArea').value;
-    const date = document.getElementById('reservationDate').value;
-    const startTime = document.getElementById('reservationStartTime').value;
-    const endTime = document.getElementById('reservationEndTime').value;
-
-    const selectedDate = new Date(date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // zera hora para comparar só data
-
-    if (selectedDate < today) {
-        showToast('error', 'Data inválida', 'Não é possível reservar datas passadas');
-        return;
-    }
-
-    // Salva no localStorage
-    const reservations = JSON.parse(localStorage.getItem('condohub_reservations')) || [];
-
-    const newReservation = {
-        id: Date.now(),
-        space: area,
-        date,
-        startTime,
-        endTime,
-        status: 'pending', // padrão inicial
-        createdAt: new Date().toISOString()
-    };
-
-    reservations.push(newReservation);
-    localStorage.setItem('condohub_reservations', JSON.stringify(reservations));
-
-    closeModal('createModal');
-    showToast('success', 'Reserva confirmada!', 'Você receberá lembrete 24h antes');
-
-    updateStats();
-    renderUpcomingReservations();
-
-    if (currentDashboard === 'reservations') {
-        showDashboard('reservations');
+        statCards[1].textContent = ads.length;
+        statCards[2].textContent = tickets.length;
     }
 }
 
