@@ -210,6 +210,51 @@ function renderRecentNotices() {
         `;
         container.insertAdjacentHTML('beforeend', noticeHTML);
     });
+    renderAllNotices();
+}
+
+function renderAllNotices() {
+    const container = document.getElementById('dynamicNotices');
+    if (!container) return;
+
+    const notices = JSON.parse(localStorage.getItem('condohub_notices')) || [];
+    container.innerHTML = '';
+
+    const all = [...notices].reverse();
+
+    all.forEach(notice => {
+        const priorityColor = {
+            info: 'bg-blue-500',
+            important: 'bg-green-500',
+            urgent: 'bg-red-500'
+        }[notice.priority] || 'bg-gray-400';
+
+        const priorityLabel = {
+            info: 'Informativo',
+            important: 'Importante',
+            urgent: 'Urgente'
+        }[notice.priority] || 'Desconhecido';
+
+        const timeAgo = formatTimeAgo(notice.createdAt);
+        const author = 'Síndico';
+
+        const noticeHTML = `
+            <div class="card">
+                <div class="card-content">
+                    <div class="flex items-start justify-between mb-3">
+                        <span class="text-xs ${priorityColor} text-white px-2 py-1 rounded">${priorityLabel}</span>
+                        <span class="text-xs text-gray-500">${timeAgo}</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">${notice.title}</h3>
+                    <p class="text-sm text-gray-600 mb-3">${notice.content}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>Por: ${author}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', noticeHTML);
+    });
 }
 
 function formatTimeAgo(dateString) {
@@ -494,6 +539,7 @@ function createNotice(event) {
     }
 
     renderRecentNotices();
+    renderAllNotices();
 }
 
 function updateStats() {
