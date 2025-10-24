@@ -168,6 +168,10 @@ function showDashboard(section = 'overview') {
     updateStats();
     }
 
+    if (section === 'tickets') {
+        renderAllTickets();
+    }
+
     renderRecentNotices();
 }
 
@@ -313,44 +317,6 @@ function showCreateModal(type) {
                 </form>
             `;
             break;
-
-        case 'listing':
-            titleText = 'Novo Anúncio';
-            formContent = `
-                <form onsubmit="createListing(event)">
-                    <div class="form-group">
-                        <label for="listingTitle" class="form-label">Título</label>
-                        <input type="text" id="listingTitle" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="listingPrice" class="form-label">Preço (R$)</label>
-                        <input type="number" id="listingPrice" class="form-input" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="listingCategory" class="form-label">Categoria</label>
-                        <select id="listingCategory" class="form-input form-select" required>
-                            <option value="">Selecione...</option>
-                            <option value="furniture">Móveis</option>
-                            <option value="electronics">Eletrônicos</option>
-                            <option value="clothing">Roupas</option>
-                            <option value="books">Livros</option>
-                            <option value="toys">Brinquedos</option>
-                            <option value="other">Outros</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="listingDescription" class="form-label">Descrição</label>
-                        <textarea id="listingDescription" class="form-input form-textarea" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="listingImages" class="form-label">Fotos</label>
-                        <input type="file" id="listingImages" class="form-input" multiple accept="image/*">
-                        <small style="color: var(--gray-600);">Máximo 5 fotos</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Publicar Anúncio</button>
-                </form>
-            `;
-            break;
             
         case 'ticket':
             titleText = 'Novo Chamado';
@@ -364,30 +330,21 @@ function showCreateModal(type) {
                         <label for="ticketCategory" class="form-label">Categoria</label>
                         <select id="ticketCategory" class="form-input form-select" required>
                             <option value="">Selecione...</option>
-                            <option value="plumbing">Hidráulica</option>
-                            <option value="electrical">Elétrica</option>
-                            <option value="cleaning">Limpeza</option>
-                            <option value="maintenance">Manutenção Geral</option>
-                            <option value="security">Segurança</option>
-                            <option value="other">Outros</option>
+                            <option value="Hidráulica">Hidráulica</option>
+                            <option value="Elétrica">Elétrica</option>
+                            <option value="Limpeza">Limpeza</option>
+                            <option value="Manutenção Geral">Manutenção Geral</option>
+                            <option value="Segurança">Segurança</option>
+                            <option value="Outros">Outros</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ticketPriority" class="form-label">Prioridade</label>
-                        <select id="ticketPriority" class="form-input form-select" required>
-                            <option value="low">Baixa</option>
-                            <option value="medium">Média</option>
-                            <option value="high">Alta</option>
-                            <option value="urgent">Urgente</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ticketDescription" class="form-label">Descrição</label>
-                        <textarea id="ticketDescription" class="form-input form-textarea" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="ticketLocation" class="form-label">Local</label>
                         <input type="text" id="ticketLocation" class="form-input" placeholder="Ex: Apto 201, Área comum, etc." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticketDescription" class="form-label">Descrição</label>
+                        <textarea id="ticketDescription" class="form-input form-textarea" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="ticketImages" class="form-label">Fotos (opcional)</label>
@@ -560,21 +517,93 @@ function updateStats() {
 
 function createTicket(event) {
     event.preventDefault();
-    
+
     const title = document.getElementById('ticketTitle').value;
     const category = document.getElementById('ticketCategory').value;
-    const priority = document.getElementById('ticketPriority').value;
-    const description = document.getElementById('ticketDescription').value;
     const location = document.getElementById('ticketLocation').value;
-    
-    // Simulate creation
-    closeModal('createModal');
-    showToast('success', 'Chamado aberto!', 'Você será notificado sobre atualizações');
-    
-    // Refresh dashboard if on tickets
-    if (currentDashboard === 'tickets') {
-        showDashboard('tickets');
+    const description = document.getElementById('ticketDescription').value;
+    const imagesInput = document.getElementById('ticketImages');
+    const file = imagesInput.files[0];
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageBase64 = file ? e.target.result : null;
+
+        const tickets = JSON.parse(localStorage.getItem('condohub_tickets')) || [];
+
+        const newTicket = {
+            title,
+            category,
+            location,
+            description,
+            image: imageBase64,
+            status: 'Aguardando',
+            createdAt: new Date().toISOString()
+        };
+
+        tickets.push(newTicket);
+        localStorage.setItem('condohub_tickets', JSON.stringify(tickets));
+
+        closeModal('createModal');
+        showToast('success', 'Chamado aberto!');
+        updateStats();
+
+        if (currentDashboard === 'tickets') {
+            showDashboard('tickets');
+        }
+
+        renderAllTickets();
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        reader.onload();
     }
+}
+
+function renderAllTickets() {
+    const container = document.querySelector('#ticketsDashboard .grid');
+    container.innerHTML = '';
+
+    const tickets = (JSON.parse(localStorage.getItem('condohub_tickets')) || []).reverse();
+
+    tickets.forEach(ticket => {
+        const daysOpen = Math.floor((new Date() - new Date(ticket.createdAt)) / (1000 * 60 * 60 * 24));
+        const openedText = daysOpen === 0
+        ? 'Aberto hoje'
+        : `Aberto há ${daysOpen} dia${daysOpen !== 1 ? 's' : ''}`;
+
+        const statusColor = {
+            'Aguardando': 'bg-gray-500',
+            'Em Andamento': 'bg-yellow-500',
+            'Concluído': 'bg-green-500'
+        } [ticket.status] || 'bg-gray-400';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-content">
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">${ticket.category}</span>
+                    <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">${ticket.location}</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2">${ticket.title}</h3>
+                <p class="text-sm text-gray-600 mb-3">${ticket.description}</p>
+
+                ${ticket.image ? `
+                <div class="mb-3">
+                    <img src="${ticket.image}" alt="Foto do chamado" class="w-full rounded" style="max-height: 200px; object-fit: cover;">
+                </div>` : ''}
+
+                <div class="flex items-center justify-between">
+                    <span class="text-xs ${statusColor} text-white px-2 py-1 rounded">${ticket.status}</span>
+                    <span class="text-xs text-gray-500">${openedText}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 }
 
 // Profile functions
