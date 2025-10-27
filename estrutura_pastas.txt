@@ -3,13 +3,5 @@
 │   ├── partials/
 │   ├── scripts/
 │   ├── styles/
-│   │   ├── base.css          ← variáveis, resets, utilitários globais
-│   │   ├── components.css    ← botões, inputs, cards etc.
-│   │   ├── dashboard.css     ← estilos do dashboard
-│   │   ├── header.css        ← estilos do header
-│   │   ├── home.css          ← estilos da home
-│   │   ├── modals.css        ← estilos dos modais
-│   │   ├── nav.css           ← estilos do menu
-│   └────── style.css         ← importa todos os outros
 ├── estrutura_pastas.txt
 └── index.html
