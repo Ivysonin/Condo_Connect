@@ -4,12 +4,1087 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Condo Connect</title>
-    <link rel="stylesheet" href="src/styles/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .toast {
+            animation: toastSlide 0.3s ease-out;
+        }
+        
+        @keyframes toastSlide {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .status-aberto { background-color: #fef3c7; color: #92400e; }
+        .status-andamento { background-color: #dbeafe; color: #1e40af; }
+        .status-resolvido { background-color: #d1fae5; color: #065f46; }
+    </style>
 </head>
-<body>
-    <div id="app"></div>
-    <script src="src/scripts/script.js"></script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9902287a80f7f610',t:'MTc2MDcyODg3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</body>
+<body class="bg-gray-50 font-sans">
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-building text-white text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Condo Connect</h2>
+                <p class="text-gray-600">Gestão Condominial Digital</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <div class="mb-6">
+                    <div class="flex bg-gray-100 rounded-lg p-1">
+                        <button id="login-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium bg-white text-blue-600 shadow-sm">
+                            Entrar
+                        </button>
+                        <button id="register-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">
+                            Cadastrar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                        <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                        <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                        Entrar
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="space-y-4 hidden">
+                    <div>
+                        <label for="register-name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                        <input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                        <input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="register-bloco" class="block text-sm font-medium text-gray-700 mb-1">Bloco</label>
+                            <input type="text" id="register-bloco" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="register-apt" class="block text-sm font-medium text-gray-700 mb-1">Apartamento</label>
+                            <input type="text" id="register-apt" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                        <input type="tel" id="register-phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-type" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Usuário</label>
+                        <select id="register-type" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Selecione...</option>
+                            <option value="morador">Morador</option>
+                            <option value="sindico">Síndico/Administrador</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                        <input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                        Cadastrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-app" class="hidden min-h-full">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-building text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-xl font-semibold text-gray-900">Condo Connect</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="user-info" class="text-sm text-gray-700"></span>
+                        <button id="logout-btn" class="text-gray-500 hover:text-gray-700 transition duration-200">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <nav class="bg-white w-64 min-h-screen shadow-sm border-r border-gray-200 slide-in">
+                <div class="p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="dashboard">
+                                <i class="fas fa-home mr-3"></i>
+                                Dashboard
+                            </button>
+                        </li>
+                        <li>
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="avisos">
+                                <i class="fas fa-bullhorn mr-3"></i>
+                                Avisos
+                            </button>
+                        </li>
+                        <li>
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="chamados">
+                                <i class="fas fa-tools mr-3"></i>
+                                Chamados
+                            </button>
+                        </li>
+                        <li>
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="perfil">
+                                <i class="fas fa-user mr-3"></i>
+                                Perfil
+                            </button>
+                        </li>
+                        <li id="admin-menu" class="hidden">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="admin">
+                                <i class="fas fa-users-cog mr-3"></i>
+                                Administração
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="section fade-in">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Dashboard</h2>
+                        <p class="text-gray-600">Bem-vindo ao Condo Connect</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-blue-100 rounded-full">
+                                    <i class="fas fa-bullhorn text-blue-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Avisos Ativos</p>
+                                    <p id="total-avisos" class="text-2xl font-semibold text-gray-900">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-yellow-100 rounded-full">
+                                    <i class="fas fa-tools text-yellow-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Meus Chamados</p>
+                                    <p id="total-chamados" class="text-2xl font-semibold text-gray-900">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="admin-stats" class="bg-white rounded-lg shadow-sm p-6 card-hover hidden">
+                            <div class="flex items-center">
+                                <div class="p-3 bg-green-100 rounded-full">
+                                    <i class="fas fa-users text-green-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600">Total Usuários</p>
+                                    <p id="total-usuarios" class="text-2xl font-semibold text-gray-900">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Avisos Recentes</h3>
+                        <div id="recent-avisos" class="space-y-4">
+                            <p class="text-gray-500 text-center py-8">Nenhum aviso encontrado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Avisos Section -->
+                <div id="avisos-section" class="section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Avisos</h2>
+                            <p class="text-gray-600">Comunicados do condomínio</p>
+                        </div>
+                        <button id="novo-aviso-btn" class="hidden bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <i class="fas fa-plus mr-2"></i>Novo Aviso
+                        </button>
+                    </div>
+                    
+                    <div id="avisos-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <p class="text-gray-500 text-center py-8 col-span-full">Nenhum aviso encontrado</p>
+                    </div>
+                </div>
+
+                <!-- Chamados Section -->
+                <div id="chamados-section" class="section hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Chamados</h2>
+                            <p class="text-gray-600">Solicitações e ocorrências</p>
+                        </div>
+                        <button id="novo-chamado-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <i class="fas fa-plus mr-2"></i>Novo Chamado
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="chamados-table" class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum chamado encontrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perfil Section -->
+                <div id="perfil-section" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Perfil</h2>
+                        <p class="text-gray-600">Suas informações pessoais</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <form id="perfil-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="perfil-name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                                    <input type="text" id="perfil-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="perfil-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                                    <input type="email" id="perfil-email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="perfil-bloco" class="block text-sm font-medium text-gray-700 mb-1">Bloco</label>
+                                    <input type="text" id="perfil-bloco" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="perfil-apt" class="block text-sm font-medium text-gray-700 mb-1">Apartamento</label>
+                                    <input type="text" id="perfil-apt" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="perfil-phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                                    <input type="tel" id="perfil-phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="flex space-x-4">
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                    Salvar Alterações
+                                </button>
+                                <button type="button" id="change-password-btn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                                    Alterar Senha
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div id="admin-section" class="section hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Administração</h2>
+                        <p class="text-gray-600">Gerenciamento do condomínio</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900">Usuários Cadastrados</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-mail</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bloco/Apt</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Modal Novo Aviso -->
+    <div id="modal-aviso" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Novo Aviso</h3>
+            </div>
+            <form id="form-aviso" class="p-6 space-y-4">
+                <div>
+                    <label for="aviso-titulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                    <input type="text" id="aviso-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="aviso-conteudo" class="block text-sm font-medium text-gray-700 mb-1">Conteúdo</label>
+                    <textarea id="aviso-conteudo" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-aviso" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                        Publicar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Novo Chamado -->
+    <div id="modal-chamado" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Novo Chamado</h3>
+            </div>
+            <form id="form-chamado" class="p-6 space-y-4">
+                <div>
+                    <label for="chamado-titulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                    <input type="text" id="chamado-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="chamado-descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                    <textarea id="chamado-descricao" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-chamado" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                        Abrir Chamado
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Alterar Senha -->
+    <div id="modal-password" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Alterar Senha</h3>
+            </div>
+            <form id="form-password" class="p-6 space-y-4">
+                <div>
+                    <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Senha Atual</label>
+                    <input type="password" id="current-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
+                    <input type="password" id="new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nova Senha</label>
+                    <input type="password" id="confirm-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-password" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                        Alterar Senha
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ESTADO DA APLICAÇÃO
+        let currentUser = null;
+        let avisos = [];
+        let chamados = [];
+        let users = [];
+
+        // CONTROLE DE EXPIRAÇÃO DE EDIÇÃO
+        let edicaoTimers = JSON.parse(localStorage.getItem('edicaoTimers')) || {};
+
+        // Remove timers expirados
+        for (const [id, expiraEm] of Object.entries(edicaoTimers)) {
+            if (Date.now() > expiraEm) delete edicaoTimers[id];
+        }
+        localStorage.setItem('edicaoTimers', JSON.stringify(edicaoTimers));
+
+        // DADOS DE EXEMPLO
+        const sampleUsers = [
+            { id: 1, name: 'José Pedro', email: 'josepedro@email.com', bloco: 'A', apt: '101', phone: '(81) 91234-5678', type: 'sindico', password: '123456', active: true },
+            { id: 2, name: 'Paulo Henrique', email: 'paulohenrique@email.com', bloco: 'B', apt: '205', phone: '(81) 99902-8922', type: 'morador', password: '123456', active: true },
+            { id: 3, name: 'Bárbara Siqueira', email: 'barbarasiqueira@email.com', bloco: 'C', apt: '303', phone: '(81) 59777-7232', type: 'morador', password: '123456', active: true }
+        ];
+
+        // INICIALIZAR DADOS
+        function initializeData() {
+            users = [...sampleUsers];
+        }
+
+        // SALVA TODOS OS DADOS NO localStorage
+        function saveData() {
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('avisos', JSON.stringify(avisos));
+            localStorage.setItem('chamados', JSON.stringify(chamados));
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            localStorage.setItem('edicaoTimers', JSON.stringify(edicaoTimers));
+        }
+
+        // CARREGA DADOS DO localStorage
+        function loadData() {
+            const storedUsers = JSON.parse(localStorage.getItem('users'));
+            const storedAvisos = JSON.parse(localStorage.getItem('avisos'));
+            const storedChamados = JSON.parse(localStorage.getItem('chamados'));
+            const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+
+            if (storedUsers && storedUsers.length) users = storedUsers;
+            if (storedAvisos && storedAvisos.length) avisos = storedAvisos;
+            if (storedChamados && storedChamados.length) chamados = storedChamados;
+            if (storedUser) {
+                currentUser = storedUser;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                updateUserInterface();
+                showSection('dashboard-section');
+            }
+        }
+
+        // INTERCEPTA AÇÕES E SALVA AUTOMATICAMENTE
+        const originalRegister = register;
+        register = function (userData) {
+            const result = originalRegister(userData);
+            saveData();
+            return result;
+        };
+
+        const originalLogin = login;
+        login = function (email, password) {
+            const result = originalLogin(email, password);
+            if (result) saveData();
+            return result;
+        };
+
+        const originalLogout = logout;
+        logout = function () {
+            originalLogout();
+            localStorage.removeItem('currentUser');
+        };
+
+        // UTILITÁRIOS
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast px-4 py-3 rounded-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            toast.textContent = message;
+
+            document.getElementById('toast-container').appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function getLocalDateBR() {
+            const now = new Date();
+            const offsetMs = now.getTimezoneOffset() * 60000;
+            const localTime = new Date(now.getTime() + offsetMs);
+            return localTime.toLocaleDateString('pt-BR');
+        }
+
+        function showModal(modalId) {
+            document.getElementById('modal-overlay').classList.remove('hidden');
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById('modal-overlay').classList.add('hidden');
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Atualizar navegação ativa
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('bg-blue-50', 'text-blue-600');
+            });
+            document.querySelector(`[data-section="${sectionId.replace('-section', '')}"]`).classList.add('bg-blue-50', 'text-blue-600');
+        }
+
+        function salvarEdicao(id) {
+            const aviso = avisos.find(a => a.id === id);
+            if (!aviso) return;
+
+            // Verifica se o tempo de edição expirou
+            if (Date.now() > edicaoTimers[id]) {
+                showToast('O tempo para editar este aviso expirou.', 'error');
+                cancelarEdicao(id);
+                return;
+            }
+
+            const novoTitulo = document.getElementById(`edit-titulo-${id}`).value.trim();
+            const novoConteudo = document.getElementById(`edit-conteudo-${id}`).value.trim();
+
+            aviso.titulo = novoTitulo;
+            aviso.conteudo = novoConteudo;
+
+            localStorage.setItem('avisos', JSON.stringify(avisos));
+            localStorage.setItem('edicaoTimers', JSON.stringify(edicaoTimers));
+
+            updateAvisos();
+            updateDashboard();
+            showToast('Aviso editado com sucesso!');
+            cancelarEdicao(id);
+        }
+
+        function cancelarEdicao(id) {
+            const card = document.querySelector(`[onclick="editAviso(${id})"]`).closest('.card-hover');
+            const form = card.querySelector(`#edit-titulo-${id}`)?.parentElement;
+            if (form) form.remove();
+            avisoEditandoId = null;
+        }
+
+        // AUTENTICAÇÃO
+        function login(email, password) {
+            const user = users.find(u => u.email === email && u.password === password && u.active);
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                updateUserInterface();
+                showSection('dashboard-section');
+                showToast('Login realizado com sucesso!');
+                return true;
+            }
+            return false;
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            showToast('Logout realizado com sucesso!');
+        }
+
+        function register(userData) {
+            // validações
+
+            // Nome: mínimo 3 letras
+            if (!/^[A-Za-zÀ-ÿ\s]{3,}$/.test(userData.name.trim())) {
+                showToast('Nome inválido: informe seu nome', 'error');
+                return false;
+            }
+
+            // Telefone: mínimo 8 dígitos numéricos
+            const digits = userData.phone.replace(/\D/g, '');
+            if (digits.length < 8) {
+                showToast('Telefone inválido: mínimo 8 dígitos.', 'error');
+                return false;
+            }
+
+            // E-mail: não pode repetir
+            const emailExists = users.some(u => u.email.toLowerCase() === userData.email.toLowerCase());
+            if (emailExists) {
+                showToast('E-mail já cadastrado.', 'error');
+                return false;
+            }
+
+            // Senha: mínimo 6 caracteres
+            if (userData.password.length < 6) {
+                showToast('Senha muito curta: mínimo 6 caracteres.', 'error');
+                return false;
+            }
+
+            const newUser = {
+                id: users.length + 1,
+                ...userData,
+                active: true
+            };
+            users.push(newUser);
+            showToast('Cadastro realizado com sucesso! Faça login para continuar.');
+            return true;
+        }
+
+        // INTERFACE DO USUÁRIO
+        function updateUserInterface() {
+            if (!currentUser) return;
+            
+            document.getElementById('user-info').textContent = `${currentUser.name} (${currentUser.type === 'sindico' ? 'Síndico' : 'Morador'})`;
+            
+            // Mostrar/ocultar elementos baseado no tipo de usuário
+            if (currentUser.type === 'sindico') {
+                document.getElementById('admin-menu').classList.remove('hidden');
+                document.getElementById('novo-aviso-btn').classList.remove('hidden');
+                document.getElementById('admin-stats').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-menu').classList.add('hidden');
+                document.getElementById('novo-aviso-btn').classList.add('hidden');
+                document.getElementById('admin-stats').classList.add('hidden');
+            }
+            
+            updateDashboard();
+            updateAvisos();
+            updateChamados();
+            updatePerfil();
+            if (currentUser.type === 'sindico') {
+                updateAdmin();
+            }
+        }
+
+        function updateDashboard() {
+            const userAvisos = avisos.length;
+            const userChamados = currentUser.type === 'sindico' ? chamados.length : chamados.filter(c => c.autorId === currentUser.id).length;
+            const totalUsers = users.length;
+            
+            document.getElementById('total-avisos').textContent = userAvisos;
+            document.getElementById('total-chamados').textContent = userChamados;
+            document.getElementById('total-usuarios').textContent = totalUsers;
+            
+            // Avisos recentes
+            const recentAvisos = avisos.slice(-3).reverse();
+            const recentAvisosContainer = document.getElementById('recent-avisos');
+            
+            if (recentAvisos.length === 0) {
+                recentAvisosContainer.innerHTML = '<p class="text-gray-500 text-center py-8">Nenhum aviso encontrado</p>';
+            } else {
+                recentAvisosContainer.innerHTML = recentAvisos.map(aviso => `
+                    <div class="border-l-4 border-blue-500 pl-4 py-2">
+                        <h4 class="font-semibold text-gray-900">${aviso.titulo}</h4>
+                        <p class="text-sm text-gray-600 mt-1">${aviso.conteudo.substring(0, 100)}...</p>
+                        <p class="text-xs text-gray-500 mt-2">Por ${aviso.autor} em ${aviso.data}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateAvisos() {
+            const avisosContainer = document.getElementById('avisos-list');
+            
+            if (avisos.length === 0) {
+                avisosContainer.innerHTML = '<p class="text-gray-500 text-center py-8 col-span-full">Nenhum aviso encontrado</p>';
+            } else {
+                avisosContainer.innerHTML = avisos.map(aviso => `
+                    <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold text-gray-900">${aviso.titulo}</h3>
+                            ${currentUser.type === 'sindico' && aviso.autorId === currentUser.id ? `
+                                <div class="flex space-x-2">
+                                    <button onclick="editAviso(${aviso.id})" class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteAviso(${aviso.id})" class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <p class="text-gray-600 mb-4">${aviso.conteudo}</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500">
+                            <span>Por ${aviso.autor}</span>
+                            <span>${aviso.data}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateChamados() {
+            const chamadosTable = document.getElementById('chamados-table');
+            const userChamados = currentUser.type === 'sindico' ? chamados : chamados.filter(c => c.autorId === currentUser.id);
+            
+            if (userChamados.length === 0) {
+                chamadosTable.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum chamado encontrado</td></tr>';
+            } else {
+                chamadosTable.innerHTML = userChamados.map(chamado => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">${chamado.titulo}</div>
+                                <div class="text-sm text-gray-500">${chamado.descricao.substring(0, 50)}...</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full status-${chamado.status}">
+                                ${chamado.status === 'aberto' ? 'Aberto' : chamado.status === 'andamento' ? 'Em Andamento' : 'Resolvido'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${chamado.data}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="viewChamado(${chamado.id})" class="text-blue-600 hover:text-blue-900 mr-3">Ver</button>
+                            ${currentUser.type === 'sindico' ? `
+                                <select onchange="updateChamadoStatus(${chamado.id}, this.value)" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                    <option value="aberto" ${chamado.status === 'aberto' ? 'selected' : ''}>Aberto</option>
+                                    <option value="andamento" ${chamado.status === 'andamento' ? 'selected' : ''}>Em Andamento</option>
+                                    <option value="resolvido" ${chamado.status === 'resolvido' ? 'selected' : ''}>Resolvido</option>
+                                </select>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function updatePerfil() {
+            document.getElementById('perfil-name').value = currentUser.name;
+            document.getElementById('perfil-email').value = currentUser.email;
+            document.getElementById('perfil-bloco').value = currentUser.bloco;
+            document.getElementById('perfil-apt').value = currentUser.apt;
+            document.getElementById('perfil-phone').value = currentUser.phone;
+        }
+
+        function updateAdmin() {
+            const usersTable = document.getElementById('users-table');
+            
+            usersTable.innerHTML = users.map(user => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.bloco}/${user.apt}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.type === 'sindico' ? 'Síndico' : 'Morador'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${user.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${user.active ? 'Ativo' : 'Inativo'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="toggleUserStatus(${user.id})" class="text-blue-600 hover:text-blue-900 mr-3">
+                            ${user.active ? 'Desativar' : 'Ativar'}
+                        </button>
+                    </td>
+                    </tr>
+            `).join('');
+        }
+        
+        // FUNÇÕES DE AÇÃO
+        function createAviso(titulo, conteudo) {
+            const newAviso = {
+                id: avisos.length + 1,
+                titulo,
+                conteudo,
+                autor: currentUser.name,
+                autorId: currentUser.id,
+                data: getLocalDateBR()
+            };
+            avisos.push(newAviso);
+
+            // Inicia o timer de 5 minutos
+            edicaoTimers[newAviso.id] = Date.now() + 5 * 60 * 1000;
+
+            updateAvisos();
+            updateDashboard();
+            saveData();
+            localStorage.setItem('edicaoTimers', JSON.stringify(edicaoTimers));
+            showToast('Aviso publicado com sucesso!');
+        }
+
+        function deleteAviso(id) {
+            avisos = avisos.filter(a => a.id !== id);
+
+            localStorage.setItem('avisos', JSON.stringify(avisos));
+
+            updateAvisos();
+            updateDashboard();
+            showToast('Aviso excluído com sucesso!');
+        }
+
+        let avisoEditandoId = null;
+        function editAviso(id) {
+            const aviso = avisos.find(a => a.id === id);
+            if (!aviso) return;
+
+            // Verifica se o tempo de edição expirou
+            if (Date.now() > edicaoTimers[id]) {
+                showToast('O tempo para editar este aviso expirou.', 'error');
+                return;
+            }
+
+            // Evita múltiplos formulários abertos
+            if (avisoEditandoId !== null) {
+                cancelarEdicao(avisoEditandoId);
+            }
+            avisoEditandoId = id;
+
+            // Localiza o card do aviso
+            const card = document.querySelector(`[onclick="editAviso(${id})"]`).closest('.card-hover');
+
+            // Cria o formulário de edição
+            const form = document.createElement('div');
+            form.className = 'mt-4 space-y-2';
+            form.innerHTML = `
+                <input type="text" id="edit-titulo-${id}" class="border p-2 w-full rounded" value="${aviso.titulo}">
+                <textarea id="edit-conteudo-${id}" class="border p-2 w-full rounded">${aviso.conteudo}</textarea>
+                <div class="flex space-x-2">
+                    <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="salvarEdicao(${id})">Salvar</button>
+                    <button class="bg-gray-400 text-white px-3 py-1 rounded" onclick="cancelarEdicao(${id})">Cancelar</button>
+                </div>
+            `;
+
+            card.appendChild(form);
+        }
+
+        function createChamado(titulo, descricao) {
+            const newChamado = {
+                id: chamados.length + 1,
+                titulo,
+                descricao,
+                status: 'aberto',
+                data: getLocalDateBR(),
+                autorId: currentUser.id,
+                autor: currentUser.name
+            };
+            chamados.push(newChamado);
+            updateChamados();
+            updateDashboard();
+            saveData();
+            showToast('Chamado aberto com sucesso!');
+        }
+
+        function updateChamadoStatus(id, status) {
+            const chamado = chamados.find(c => c.id === id);
+            if (chamado) {
+                chamado.status = status;
+                updateChamados();
+                showToast('Status do chamado atualizado!');
+            }
+        }
+
+        function viewChamado(id) {
+            const chamado = chamados.find(c => c.id === id);
+            if (chamado) {
+                showToast(`Chamado: ${chamado.titulo} - ${chamado.descricao}`, 'info');
+            }
+        }
+
+        function toggleUserStatus(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.active = !user.active;
+                updateAdmin();
+                showToast(`Usuário ${user.active ? 'ativado' : 'desativado'} com sucesso!`);
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            loadData();
+            
+            // tabs de login/cadastro
+            document.getElementById('login-tab').addEventListener('click', function() {
+                this.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+                this.classList.remove('text-gray-500');
+                document.getElementById('register-tab').classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+                document.getElementById('register-tab').classList.add('text-gray-500');
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('register-form').classList.add('hidden');
+            });
+
+            document.getElementById('register-tab').addEventListener('click', function() {
+                this.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+                this.classList.remove('text-gray-500');
+                document.getElementById('login-tab').classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+                document.getElementById('login-tab').classList.add('text-gray-500');
+                document.getElementById('register-form').classList.remove('hidden');
+                document.getElementById('login-form').classList.add('hidden');
+            });
+
+            // formulário de login
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                if (!login(email, password)) {
+                    showToast('E-mail ou senha incorretos!', 'error');
+                }
+            });
+
+            // formulário de cadastro
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const userData = {
+                    name: document.getElementById('register-name').value,
+                    email: document.getElementById('register-email').value,
+                    bloco: document.getElementById('register-bloco').value,
+                    apt: document.getElementById('register-apt').value,
+                    phone: document.getElementById('register-phone').value,
+                    type: document.getElementById('register-type').value,
+                    password: document.getElementById('register-password').value
+                };
+
+                if (register(userData)) {
+                    document.getElementById('register-form').reset();
+                    document.getElementById('login-tab').click();
+                }
+            });
+
+            // navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    showSection(section + '-section');
+                });
+            });
+
+            // logout
+            document.getElementById('logout-btn').addEventListener('click', logout);
+
+            // modais
+            document.getElementById('novo-aviso-btn').addEventListener('click', () => showModal('modal-aviso'));
+            document.getElementById('novo-chamado-btn').addEventListener('click', () => showModal('modal-chamado'));
+            document.getElementById('change-password-btn').addEventListener('click', () => showModal('modal-password'));
+
+            // cancelar modais
+            document.getElementById('cancel-aviso').addEventListener('click', () => hideModal('modal-aviso'));
+            document.getElementById('cancel-chamado').addEventListener('click', () => hideModal('modal-chamado'));
+            document.getElementById('cancel-password').addEventListener('click', () => hideModal('modal-password'));
+
+            // overlay para fechar modais
+            document.getElementById('modal-overlay').addEventListener('click', function() {
+                document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+                    modal.classList.add('hidden');
+                });
+                this.classList.add('hidden');
+            });
+
+            // formulários dos modais
+            document.getElementById('form-aviso').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const titulo = document.getElementById('aviso-titulo').value;
+                const conteudo = document.getElementById('aviso-conteudo').value;
+                createAviso(titulo, conteudo);
+                this.reset();
+                hideModal('modal-aviso');
+            });
+
+            document.getElementById('form-chamado').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const titulo = document.getElementById('chamado-titulo').value;
+                const descricao = document.getElementById('chamado-descricao').value;
+                createChamado(titulo, descricao);
+                this.reset();
+                hideModal('modal-chamado');
+            });
+
+            document.getElementById('form-password').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                // validação: mínimo 6 caracteres
+                if (newPassword.length < 6) {
+                    showToast('A nova senha deve ter no mínimo 6 caracteres.', 'error');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    showToast('As senhas não coincidem!', 'error');
+                    return;
+                }
+                
+                currentUser.password = newPassword;
+                showToast('Senha alterada com sucesso!');
+                this.reset();
+                hideModal('modal-password');
+            });
+
+            // formulário de perfil
+            document.getElementById('perfil-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                currentUser.name = document.getElementById('perfil-name').value;
+                currentUser.email = document.getElementById('perfil-email').value;
+                currentUser.bloco = document.getElementById('perfil-bloco').value;
+                currentUser.apt = document.getElementById('perfil-apt').value;
+                currentUser.phone = document.getElementById('perfil-phone').value;
+                
+                updateUserInterface();
+                saveData();
+                showToast('Perfil atualizado com sucesso!');
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993e9323b7831433',t:'MTc2MTM2MjM5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
