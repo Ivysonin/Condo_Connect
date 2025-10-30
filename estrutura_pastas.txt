@@ -1,7 +1,0 @@
-.
-├── src/
-│   ├── partials/
-│   ├── scripts/
-│   ├── styles/
-├── estrutura_pastas.txt
-└── index.html
