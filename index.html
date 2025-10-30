@@ -188,7 +188,7 @@
                         <li>
                             <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="chamados">
                                 <i class="fas fa-tools mr-3"></i>
-                                Chamados
+                                Ocorrências
                             </button>
                         </li>
                         <li>
@@ -235,7 +235,7 @@
                                     <i class="fas fa-tools text-yellow-600"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-600">Meus Chamados</p>
+                                    <p class="text-sm font-medium text-gray-600">Minhas Ocorrências</p>
                                     <p id="total-chamados" class="text-2xl font-semibold text-gray-900">0</p>
                                 </div>
                             </div>
@@ -283,11 +283,11 @@
                 <div id="chamados-section" class="section hidden">
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Chamados</h2>
-                            <p class="text-gray-600">Solicitações e ocorrências</p>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Ocorrências</h2>
+                            <p class="text-gray-600">Solicitações e problemáticas</p>
                         </div>
                         <button id="novo-chamado-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                            <i class="fas fa-plus mr-2"></i>Novo Chamado
+                            <i class="fas fa-plus mr-2"></i>Nova Ocorrência
                         </button>
                     </div>
                     
@@ -305,7 +305,7 @@
                                 </thead>
                                 <tbody id="chamados-table" class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhum chamado encontrado</td>
+                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">Nenhuma ocorrência encontrada</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -425,7 +425,7 @@
     <div id="modal-chamado" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Novo Chamado</h3>
+                <h3 class="text-lg font-semibold text-gray-900">Nova Ocorrência</h3>
             </div>
             <form id="form-chamado" class="p-6 space-y-4">
                 <div>
@@ -453,7 +453,7 @@
                         Cancelar
                     </button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
-                        Abrir Chamado
+                        Abrir Ocorrência
                     </button>
                 </div>
             </form>
@@ -465,7 +465,7 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
             <!-- Cabeçalho -->
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                <h3 class="text-lg font-semibold text-gray-900">Detalhes do Chamado</h3>
+                <h3 class="text-lg font-semibold text-gray-900">Detalhes da Ocorrência</h3>
                 <button id="close-view-chamado" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">&times;</button>
             </div>
 
@@ -852,7 +852,7 @@
             userChamados = userChamados.filter(c => c.status === 'aberto' || c.status === 'andamento');
 
             if (userChamados.length === 0) {
-                chamadosTable.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum chamado em aberto ou em andamento</td></tr>';
+                chamadosTable.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhuma ocorrência em aberto ou em andamento</td></tr>';
             } else {
                 chamadosTable.innerHTML = userChamados.map(chamado => `
                     <tr>
@@ -1003,7 +1003,7 @@
             updateChamados();
             updateDashboard();
             saveData();
-            showToast('Chamado aberto com sucesso!');
+            showToast('Ocorrência aberta com sucesso!');
         }
 
         function updateChamadoStatus(id, status) {
@@ -1011,7 +1011,7 @@
             if (chamado) {
                 chamado.status = status;
                 updateChamados();
-                showToast('Status do chamado atualizado!');
+                showToast('Status da ocorrência atualizado!');
             }
         }
 
