@@ -825,9 +825,16 @@
                             <h3 class="text-lg font-semibold text-gray-900">${aviso.titulo}</h3>
                             ${currentUser.type === 'sindico' && aviso.autorId === currentUser.id ? `
                                 <div class="flex space-x-2">
-                                    <button onclick="editAviso(${aviso.id})" class="text-blue-600 hover:text-blue-800">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                    ${Date.now() < aviso.editavelAte ? `
+                                        <button onclick="editAviso(${aviso.id})" 
+                                            class="text-blue-600 hover:text-blue-900 font-medium transition">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    ` : `
+                                        <button class="text-gray-400 cursor-not-allowed font-medium" disabled title="Edição expirada">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    `}
                                     <button onclick="deleteAviso(${aviso.id})" class="text-red-600 hover:text-red-800">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -929,12 +936,12 @@
                 conteudo,
                 autor: currentUser.name,
                 autorId: currentUser.id,
-                data: getLocalDateBR()
+                data: getLocalDateBR(),
+                editavelAte: Date.now() + 5 * 60 * 1000
             };
             avisos.push(newAviso);
 
-            // Inicia o timer de 5 minutos
-            edicaoTimers[newAviso.id] = Date.now() + 5 * 60 * 1000;
+            edicaoTimers[newAviso.id] = newAviso.editavelAte
 
             updateAvisos();
             updateDashboard();
@@ -959,7 +966,7 @@
             if (!aviso) return;
 
             // Verifica se o tempo de edição expirou
-            if (Date.now() > edicaoTimers[id]) {
+            if (Date.now() > aviso.editavelAte) {
                 showToast('O tempo para editar este aviso expirou.', 'error');
                 return;
             }
@@ -1011,6 +1018,7 @@
             if (chamado) {
                 chamado.status = status;
                 updateChamados();
+                saveData();
                 showToast('Status da ocorrência atualizado!');
             }
         }
@@ -1049,6 +1057,7 @@
             const user = users.find(u => u.id === id);
             if (user) {
                 user.active = !user.active;
+                saveData();
                 updateAdmin();
                 showToast(`Usuário ${user.active ? 'ativado' : 'desativado'} com sucesso!`);
             }
