@@ -112,9 +112,9 @@ function showSection(sectionId) {
     
     // Atualizar navegação ativa
     document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('bg-blue-50', 'text-blue-600');
+        item.classList.remove('bg-green-50', 'text-green-600');
     });
-    document.querySelector(`[data-section="${sectionId.replace('-section', '')}"]`).classList.add('bg-blue-50', 'text-blue-600');
+    document.querySelector(`[data-section="${sectionId.replace('-section', '')}"]`).classList.add('bg-green-50', 'text-green-600');
 }
 
 function salvarEdicao(id) {
@@ -277,7 +277,7 @@ function updateAvisos() {
                         <div class="flex space-x-2">
                             ${Date.now() < aviso.editavelAte ? `
                                 <button onclick="editAviso(${aviso.id})" 
-                                    class="text-blue-600 hover:text-blue-900 font-medium transition">
+                                    class="text-green-600 hover:text-green-900 font-medium transition">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             ` : `
@@ -437,7 +437,7 @@ function editAviso(id) {
         <input type="text" id="edit-titulo-${id}" class="border p-2 w-full rounded" value="${aviso.titulo}">
         <textarea id="edit-conteudo-${id}" class="border p-2 w-full rounded">${aviso.conteudo}</textarea>
         <div class="flex space-x-2">
-            <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="salvarEdicao(${id})">Salvar</button>
+            <button class="bg-green-600 text-white px-3 py-1 rounded" onclick="salvarEdicao(${id})">Salvar</button>
             <button class="bg-gray-400 text-white px-3 py-1 rounded" onclick="cancelarEdicao(${id})">Cancelar</button>
         </div>
     `;
@@ -520,18 +520,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // tabs de login/cadastro
     document.getElementById('login-tab').addEventListener('click', function() {
-        this.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+        this.classList.add('bg-white', 'text-green-600', 'shadow-sm');
         this.classList.remove('text-gray-500');
-        document.getElementById('register-tab').classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+        document.getElementById('register-tab').classList.remove('bg-white', 'text-green-600', 'shadow-sm');
         document.getElementById('register-tab').classList.add('text-gray-500');
         document.getElementById('login-form').classList.remove('hidden');
         document.getElementById('register-form').classList.add('hidden');
     });
 
     document.getElementById('register-tab').addEventListener('click', function() {
-        this.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+        this.classList.add('bg-white', 'text-green-600', 'shadow-sm');
         this.classList.remove('text-gray-500');
-        document.getElementById('login-tab').classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+        document.getElementById('login-tab').classList.remove('bg-white', 'text-green-600', 'shadow-sm');
         document.getElementById('login-tab').classList.add('text-gray-500');
         document.getElementById('register-form').classList.remove('hidden');
         document.getElementById('login-form').classList.add('hidden');

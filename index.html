@@ -71,7 +71,7 @@
             <div class="bg-white rounded-lg shadow-md p-8">
                 <div class="mb-6">
                     <div class="flex bg-gray-100 rounded-lg p-1">
-                        <button id="login-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium bg-white text-blue-600 shadow-sm">
+                        <button id="login-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium bg-white text-green-600 shadow-sm">
                             Entrar
                         </button>
                         <button id="register-tab" class="flex-1 py-2 px-4 rounded-md text-sm font-medium text-gray-500 hover:text-gray-700">
@@ -84,13 +84,13 @@
                 <form id="login-form" class="space-y-4">
                     <div>
                         <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                        <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
                     <div>
                         <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                        <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200">
                         Entrar
                     </button>
                 </form>
@@ -99,17 +99,17 @@
                 <form id="register-form" class="space-y-4 hidden">
                     <div>
                         <label for="register-name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                        <input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
                     <div>
                         <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                        <input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="register-bloco" class="block text-sm font-medium text-gray-700 mb-1">Bloco</label>
                             <select id="register-bloco" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 <option value="">Selecione...</option>
                                 <option value="A">Bloco A</option>
                                 <option value="B">Bloco B</option>
@@ -119,17 +119,17 @@
                         <div>
                             <label for="register-apt" class="block text-sm font-medium text-gray-700 mb-1">Apartamento</label>
                             <input type="number" id="register-apt" min="1" max="999" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                 placeholder="Ex: 1">
                         </div>
                     </div>
                     <div>
                         <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                        <input type="tel" id="register-phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="tel" id="register-phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
                     <div>
                         <label for="register-type" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Usuário</label>
-                        <select id="register-type" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select id="register-type" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                             <option value="">Selecione...</option>
                             <option value="morador">Morador</option>
                             <option value="sindico">Síndico/Administrador</option>
@@ -137,9 +137,9 @@
                     </div>
                     <div>
                         <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                        <input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200">
                         Cadastrar
                     </button>
                 </form>
@@ -175,31 +175,31 @@
                 <div class="p-4">
                     <ul class="space-y-2">
                         <li>
-                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="dashboard">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition duration-200" data-section="dashboard">
                                 <i class="fas fa-home mr-3"></i>
                                 Dashboard
                             </button>
                         </li>
                         <li>
-                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="avisos">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition duration-200" data-section="avisos">
                                 <i class="fas fa-bullhorn mr-3"></i>
                                 Avisos
                             </button>
                         </li>
                         <li>
-                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="chamados">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition duration-200" data-section="chamados">
                                 <i class="fas fa-tools mr-3"></i>
                                 Ocorrências
                             </button>
                         </li>
                         <li>
-                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="perfil">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition duration-200" data-section="perfil">
                                 <i class="fas fa-user mr-3"></i>
                                 Perfil
                             </button>
                         </li>
                         <li id="admin-menu" class="hidden">
-                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition duration-200" data-section="admin">
+                            <button class="nav-item w-full flex items-center px-4 py-3 text-left text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition duration-200" data-section="admin">
                                 <i class="fas fa-users-cog mr-3"></i>
                                 Administração
                             </button>
@@ -270,7 +270,7 @@
                             <h2 class="text-2xl font-bold text-gray-900 mb-2">Avisos</h2>
                             <p class="text-gray-600">Comunicados do condomínio</p>
                         </div>
-                        <button id="novo-aviso-btn" class="hidden bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                        <button id="novo-aviso-btn" class="hidden bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                             <i class="fas fa-plus mr-2"></i>Novo Aviso
                         </button>
                     </div>
@@ -287,7 +287,7 @@
                             <h2 class="text-2xl font-bold text-gray-900 mb-2">Ocorrências</h2>
                             <p class="text-gray-600">Solicitações e problemáticas</p>
                         </div>
-                        <button id="novo-chamado-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                        <button id="novo-chamado-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                             <i class="fas fa-plus mr-2"></i>Nova Ocorrência
                         </button>
                     </div>
@@ -326,29 +326,29 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label for="perfil-name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                                    <input type="text" id="perfil-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <input type="text" id="perfil-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="perfil-email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                                    <input type="email" id="perfil-email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <input type="email" id="perfil-email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label for="perfil-bloco" class="block text-sm font-medium text-gray-700 mb-1">Bloco</label>
-                                    <input type="text" id="perfil-bloco" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <input type="text" id="perfil-bloco" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="perfil-apt" class="block text-sm font-medium text-gray-700 mb-1">Apartamento</label>
-                                    <input type="text" id="perfil-apt" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <input type="text" id="perfil-apt" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label for="perfil-phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                                    <input type="tel" id="perfil-phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <input type="tel" id="perfil-phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                             </div>
                             <div class="flex space-x-4">
-                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                     Salvar Alterações
                                 </button>
                                 <button type="button" id="change-password-btn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200">
@@ -404,17 +404,17 @@
             <form id="form-aviso" class="p-6 space-y-4">
                 <div>
                     <label for="aviso-titulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" id="aviso-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="text" id="aviso-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div>
                     <label for="aviso-conteudo" class="block text-sm font-medium text-gray-700 mb-1">Conteúdo</label>
-                    <textarea id="aviso-conteudo" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    <textarea id="aviso-conteudo" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" id="cancel-aviso" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
                         Cancelar
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
                         Publicar
                     </button>
                 </div>
@@ -431,11 +431,11 @@
             <form id="form-chamado" class="p-6 space-y-4">
                 <div>
                     <label for="chamado-titulo" class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" id="chamado-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="text" id="chamado-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div>
                     <label for="chamado-categoria" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                    <select id="chamado-categoria" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <select id="chamado-categoria" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                         <option value="">Selecione...</option>
                         <option value="Hidráulica">Hidráulica</option>
                         <option value="Elétrica">Elétrica</option>
@@ -447,13 +447,13 @@
                 </div>
                 <div>
                     <label for="chamado-descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
-                    <textarea id="chamado-descricao" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    <textarea id="chamado-descricao" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" id="cancel-chamado" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
                         Cancelar
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
                         Abrir Ocorrência
                     </button>
                 </div>
@@ -526,21 +526,21 @@
             <form id="form-password" class="p-6 space-y-4">
                 <div>
                     <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Senha Atual</label>
-                    <input type="password" id="current-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="password" id="current-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div>
                     <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
-                    <input type="password" id="new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="password" id="new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div>
                     <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nova Senha</label>
-                    <input type="password" id="confirm-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="password" id="confirm-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" id="cancel-password" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200">
                         Cancelar
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
                         Alterar Senha
                     </button>
                 </div>
