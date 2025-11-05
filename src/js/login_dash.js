@@ -362,6 +362,47 @@ function updatePerfil() {
     document.getElementById('perfil-phone').value = currentUser.phone;
 }
 
+function updateProfile(updatedData) {
+    // Validações
+    if (!/^[A-Za-zÀ-ÿ\s]{3,}$/.test(updatedData.name.trim())) {
+        showToast('Nome inválido: informe seu nome completo.', 'error');
+        return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedData.email.trim())) {
+        showToast('E-mail inválido.', 'error');
+        return false;
+    }
+    if (!/^[A-Z]\/\d{1,3}$/.test(updatedData.unit.trim())) {
+        showToast('Formato inválido: use o padrão A/000.', 'error');
+        return false;
+    }
+    const digits = updatedData.phone.replace(/\D/g, '');
+    if (digits.length < 8) {
+        showToast('Telefone inválido: mínimo 8 dígitos.', 'error');
+        return false;
+    }
+
+    // Atualização do usuário atual
+    currentUser.name  = updatedData.name.trim();
+    currentUser.email = updatedData.email.trim();
+    currentUser.unit  = updatedData.unit.trim().toUpperCase();
+    currentUser.phone = updatedData.phone.trim();
+
+    // Atualiza o array global `users`
+    const userIndex = users.findIndex(u => u.id === currentUser.id);
+    if (userIndex !== -1) {
+        users[userIndex] = { ...users[userIndex], ...currentUser };
+    }
+
+    // Persiste os dados
+    saveData();
+
+    // Atualiza UI
+    updateUserInterface();
+    showToast('Perfil atualizado com sucesso!');
+    return true;
+}
+
 function updateAdmin() {
     const usersTable = document.getElementById('users-table');
     
@@ -648,16 +689,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // formulário de perfil
-    document.getElementById('perfil-form').addEventListener('submit', function(e) {
+    document.getElementById('perfil-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        currentUser.name = document.getElementById('perfil-name').value;
-        currentUser.email = document.getElementById('perfil-email').value;
-        currentUser.bloco = document.getElementById('perfil-bloco').value;
-        currentUser.apt = document.getElementById('perfil-apt').value;
-        currentUser.phone = document.getElementById('perfil-phone').value;
-        
-        updateUserInterface();
-        saveData();
-        showToast('Perfil atualizado com sucesso!');
+
+        const updatedData = {
+            name:  document.getElementById('perfil-name').value,
+            email: document.getElementById('perfil-email').value,
+            unit:  document.getElementById('perfil-unit').value,
+            phone: document.getElementById('perfil-phone').value
+        };
+
+        updateProfile(updatedData);
     });
 });
