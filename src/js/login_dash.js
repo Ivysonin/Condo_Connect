@@ -15,9 +15,9 @@ localStorage.setItem('edicaoTimers', JSON.stringify(edicaoTimers));
 
 // DADOS DE EXEMPLO
 const sampleUsers = [
-    { id: 1, name: 'José Pedro', email: 'josepedro@email.com', bloco: 'A', apt: '101', phone: '(81) 91234-5678', type: 'sindico', password: '123456', active: true },
-    { id: 2, name: 'Paulo Henrique', email: 'paulohenrique@email.com', bloco: 'B', apt: '205', phone: '(81) 99902-8922', type: 'morador', password: '123456', active: true },
-    { id: 3, name: 'Bárbara Siqueira', email: 'barbarasiqueira@email.com', bloco: 'C', apt: '303', phone: '(81) 59777-7232', type: 'morador', password: '123456', active: true }
+    { id: 1, name: 'José Pedro', email: 'josepedro@email.com', unit: 'A/101', phone: '(81) 91234-5678', type: 'sindico', password: '123456', active: true },
+    { id: 2, name: 'Paulo Henrique', email: 'paulohenrique@email.com', unit: 'B/205', phone: '(81) 99902-8922', type: 'morador', password: '123456', active: true },
+    { id: 3, name: 'Bárbara Siqueira', email: 'barbarasiqueira@email.com', unit: 'C/303', phone: '(81) 59777-7232', type: 'morador', password: '123456', active: true }
 ];
 
 // INICIALIZAR DADOS
@@ -178,6 +178,12 @@ function register(userData) {
     // Nome: mínimo 3 letras
     if (!/^[A-Za-zÀ-ÿ\s]{3,}$/.test(userData.name.trim())) {
         showToast('Nome inválido: informe seu nome', 'error');
+        return false;
+    }
+
+    // Bloco/Apartamento: formato A/000
+    if (!/^[A-Z]\/\d{1,3}$/.test(userData.unit.trim())) {
+        showToast('Formato inválido: use o padrão A/000', 'error');
         return false;
     }
 
@@ -352,8 +358,7 @@ function updateChamados() {
 function updatePerfil() {
     document.getElementById('perfil-name').value = currentUser.name;
     document.getElementById('perfil-email').value = currentUser.email;
-    document.getElementById('perfil-bloco').value = currentUser.bloco;
-    document.getElementById('perfil-apt').value = currentUser.apt;
+    document.getElementById('perfil-unit').value = currentUser.unit;
     document.getElementById('perfil-phone').value = currentUser.phone;
 }
 
@@ -364,7 +369,7 @@ function updateAdmin() {
         <tr>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.email}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.bloco}/${user.apt}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.unit || '-'}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 ${user.type === 'sindico' ? 'Síndico' : 'Morador'}
             </td>
@@ -555,12 +560,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // formulário de cadastro
     document.getElementById('register-form').addEventListener('submit', function(e) {
         e.preventDefault();
+
         const userData = {
-            name: document.getElementById('register-name').value,
-            email: document.getElementById('register-email').value,
-            bloco: document.getElementById('register-bloco').value,
-            apt: document.getElementById('register-apt').value,
-            phone: document.getElementById('register-phone').value,
+            name: document.getElementById('register-name').value.trim(),
+            email: document.getElementById('register-email').value.trim(),
+            unit: document.getElementById('register-unit').value.trim().toUpperCase(), // A/303
+            phone: document.getElementById('register-phone').value.trim(),
             type: document.getElementById('register-type').value,
             password: document.getElementById('register-password').value
         };
