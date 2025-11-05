@@ -331,7 +331,11 @@ function updateChamados() {
                     ${chamado.data}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button onclick="viewChamado(${chamado.id})" class="text-blue-600 hover:text-blue-900 mr-3">Ver</button>
+                    <button 
+                        onclick="viewChamado(${chamado.id}, this)"
+                        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:shadow-md transition-transform duration-200 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-3">
+                        Ver
+                    </button>
                     ${currentUser.type === 'sindico' ? `
                         <select onchange="updateChamadoStatus(${chamado.id}, this.value)" class="text-sm border border-gray-300 rounded px-2 py-1">
                             <option value="aberto" ${chamado.status === 'aberto' ? 'selected' : ''}>Aberto</option>
