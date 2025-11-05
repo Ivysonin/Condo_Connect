@@ -5,6 +5,12 @@ Desenvolvido com foco em **clareza, usabilidade e performance**, este repositór
 
 ---
 
+## 🖼️ Preview da Landing Page
+
+![Preview da Landing Page](./src/img/imagem_condoC.png)
+
+---
+
 ## 🚀 Visão Geral
 
 O **Condo Connect** facilita a administração de condomínios e a comunicação entre síndicos, moradores e prestadores de serviço.  
