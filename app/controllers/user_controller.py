@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app.schemas.user_schema import UserSchema
 from app.services.user_service import UserService
-from app.services.auth_service import AuthService
 
 
 user_bp = Blueprint("user", __name__)

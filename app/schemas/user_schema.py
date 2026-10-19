@@ -3,12 +3,14 @@ import re
 
 
 class UserSchema(Schema):
+    id = fields.Int(dump_only=True)
     nome_completo = fields.Str(required=True)
     email = fields.Email(required=True)
     bloco_apto = fields.Str(required=True)
     telefone = fields.Str(required=True)
     tipo_usuario = fields.Str(required=True)
-    senha = fields.Str(required=True)
+    senha = fields.Str(required=True, load_only=True)
+    ativo = fields.Bool(dump_only=True)
     
 
     @validates("bloco_apto")

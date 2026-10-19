@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     telefone = db.Column(db.String(20), nullable=False)
     tipo_usuario = db.Column(db.String(20), nullable=False)
     senha_hash = db.Column(db.String(255), nullable=False)
+    ativo = db.Column(db.Boolean, nullable=False, default=True, server_default=db.true())
 
 
     def __repr__(self):

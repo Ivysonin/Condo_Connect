@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Condo Connect</title>
+  <link rel="icon" href="../static/img/logoICO.ico" type="image/png">
+
+  <link rel="stylesheet" href="../static/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="antialiased">
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <img src="../static/img/logoICO.ico" alt="Logo Condo Connect" class="w-10 h-10 object-contain">
+          <span class="font-semibold text-lg" style="color:var(--text-primary)">Condo Connect</span>
+        </div>
+        <nav class="hidden md:flex items-center gap-8 text-gray-900 font-medium">
+          <a href="#beneficios" class="hover:text-[var(--text-primary)]">Benefícios</a>
+          <a href="#depoimentos" class="hover:text-[var(--text-primary)]">Depoimentos</a>
+          <a href="#contato" class="hover:text-[var(--text-primary)]">Contato</a>
+          <a href="{{ url_for('pages.login_dash') }}" class="px-4 py-2 rounded-full text-white font-semibold" style="background:linear-gradient(90deg,var(--action),var(--action-2))">Login</a>
+        </nav>
+        <div class="md:hidden">
+          <!-- mobile menu placeholder -->
+          <button aria-label="Abrir menu" class="p-2 rounded-md">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="relative w-full">
+    <section class="relative w-full h-screen flex items-center justify-center text-center overflow-hidden">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <div class="hero-content max-w-4xl px-6">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">Gestão condominial inteligente para uma administração moderna e conectada</h1>
+        <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Transforme a comunicação e a eficiência do seu condomínio com tecnologia, transparência e controle em um único lugar.</p>
+      </div>
+    </section>
+
+    <!-- Benefícios -->
+    <section id="beneficios" class="py-16 bg-white">
+      <div class="container text-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold" style="color:var(--text-primary)">Benefícios</h2>
+        <p class="mt-2 text-gray-600 max-w-2xl mx-auto text-lg">Funcionalidades criadas para facilitar o dia a dia do seu condomínio.</p>
+      </div>
+
+      <div class="container relative">
+        <div id="carousel" aria-label="Carrossel de benefícios">
+          <!-- card 1 -->
+          <div class="card glass-card p-10 rounded-2xl text-center">
+            <h3 class="text-2xl font-semibold mb-4" style="color:var(--text-primary)">Comunicação imediata</h3>
+            <p class="text-gray-700 text-lg">Envie comunicados e avisos diretamente aos moradores de forma rápida e simples.</p>
+          </div>
+
+          <!-- card 2 -->
+          <div class="card glass-card p-10 rounded-2xl text-center">
+            <h3 class="text-2xl font-semibold mb-4" style="color:var(--text-primary)">Ocorrências & chamados</h3>
+            <p class="text-gray-700 text-lg">Registre, acompanhe e resolva solicitações com histórico e controle total.</p>
+          </div>
+
+          <!-- card 3 -->
+          <div class="card glass-card p-10 rounded-2xl text-center">
+            <h3 class="text-2xl font-semibold mb-4" style="color:var(--text-primary)">Transparência & relatórios</h3>
+            <p class="text-gray-700 text-lg">Relatórios claros para prestação de contas e melhores decisões de gestão.</p>
+          </div>
+
+          <!-- card 4 -->
+          <div class="card glass-card p-10 rounded-2xl text-center">
+            <h3 class="text-2xl font-semibold mb-4" style="color:var(--text-primary)">Perfis personalizados</h3>
+            <p class="text-gray-700 text-lg">Acesse com perfis distintos para morador, síndico e administrador com permissões claras.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Por que o Condo Connect importa (versão em cards) -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center bg-gradient-to-b from-[var(--surface)]/30 to-white/80 rounded-3xl">
+  <h3 class="text-3xl font-bold mb-8" style="color:var(--text-primary)">
+    Por que o Condo Connect importa?
+  </h3>
+  <p class="text-gray-600 max-w-3xl mx-auto mb-12">
+    Em condomínios, processos fragmentados e comunicação ineficiente geram custo, atrito e perda de tempo. 
+    O Condo Connect centraliza fluxos de informação, facilita o controle de ocorrências e garante transparência em todas as ações.
+  </p>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform">
+      <div class="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, var(--action), var(--action-2));">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m8 3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h4 class="text-xl font-semibold mb-3" style="color:var(--text-primary)">Centraliza informações</h4>
+      <p class="text-gray-600 leading-relaxed">
+        Todos os comunicados e históricos ficam disponíveis em um só lugar, garantindo organização e acessibilidade.
+      </p>
+    </div>
+
+    <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform">
+      <div class="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, var(--action), var(--action-2));">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h4 class="text-xl font-semibold mb-3" style="color:var(--text-primary)">Aumenta a eficiência</h4>
+      <p class="text-gray-600 leading-relaxed">
+        Reduz o tempo de resposta, agiliza a comunicação e melhora o fluxo das informações entre síndico e moradores.
+      </p>
+    </div>
+
+    <div class="glass-card p-8 rounded-2xl hover:scale-105 transition-transform">
+      <div class="w-14 h-14 mx-auto mb-5 flex items-center justify-center rounded-full" style="background: linear-gradient(135deg, var(--action), var(--action-2));">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h6" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h4v8h-4z" />
+        </svg>
+      </div>
+      <h4 class="text-xl font-semibold mb-3" style="color:var(--text-primary)">Facilita a transparência</h4>
+      <p class="text-gray-600 leading-relaxed">
+        Relatórios claros e acessíveis tornam a gestão mais confiável e fortalecem a relação com os moradores.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="py-16 bg-white">
+      <div class="container">
+        <div class="text-center mb-8">
+          <h3 class="text-3xl font-bold" style="color:var(--text-primary)">Depoimentos</h3>
+          <p class="text-gray-600">O que síndicos e administradores dizem sobre o Condo Connect</p>
+        </div>
+
+        <div class="overflow-hidden">
+          <div class="testimonial-track">
+            <!-- duplicate set so scroll looks continuous -->
+            <div class="flex gap-6">
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“A comunicação no condomínio ficou muito mais ágil e clara.”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Maria Silva<br><span class="text-gray-500 font-normal">Síndica - Residencial Central</span></div>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“Agora temos total controle e registro de todas as ocorrências.”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Carlos Lima<br><span class="text-gray-500 font-normal">Administrador - Torres do Sol</span></div>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“Interface moderna e simples, moradores adoraram!”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Paula Fernandes<br><span class="text-gray-500 font-normal">Síndica - Jardim das Flores</span></div>
+              </div>
+
+              <!-- repeat so marquee feels continuous -->
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“A comunicação no condomínio ficou muito mais ágil e clara.”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Maria Silva<br><span class="text-gray-500 font-normal">Síndica - Residencial Central</span></div>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“Agora temos total controle e registro de todas as ocorrências.”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Carlos Lima<br><span class="text-gray-500 font-normal">Administrador - Torres do Sol</span></div>
+              </div>
+
+              <div class="glass-card p-6 rounded-2xl min-w-[320px]">
+                <p class="text-gray-700 italic mb-4">“Interface moderna e simples, moradores adoraram!”</p>
+                <div class="mt-4 font-semibold text-sm" style="color:var(--text-primary)">Paula Fernandes<br><span class="text-gray-500 font-normal">Síndica - Jardim das Flores</span></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="py-16 bg-white">
+      <div class="container">
+        <div class="max-w-3xl mx-auto">
+          <div class="glass-card p-8 rounded-2xl">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold" style="color:var(--text-primary)">Entre em contato</h3>
+              <p class="text-gray-600">Preencha o formulário e nossa equipe retornará em breve.</p>
+            </div>
+
+            <form id="contactForm" class="grid grid-cols-1 gap-4">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <input type="text" name="name" placeholder="Nome completo" class="p-3 rounded-lg border border-gray-200" required>
+                <input type="email" name="email" placeholder="E-mail de contato" class="p-3 rounded-lg border border-gray-200" required>
+              </div>
+              <input type="text" name="subject" placeholder="Assunto" class="p-3 rounded-lg border border-gray-200">
+              <textarea name="message" rows="5" placeholder="Escreva sua mensagem..." class="p-3 rounded-lg border border-gray-200"></textarea>
+              <div class="flex items-center justify-center mt-2">
+                <button type="submit" class="px-6 py-3 rounded-xl text-white font-semibold" style="background:linear-gradient(90deg,var(--action),var(--action-2))">Enviar mensagem</button>
+              </div>
+              <div id="formStatus" class="mt-2 text-center text-sm text-gray-600"></div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--text-primary)] text-white py-6">
+      <div class="container flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="../static/img/logoICO.ico" alt="Logo" class="w-10 h-10 object-contain">
+          <div>
+            <div class="font-semibold">Condo Connect</div>
+            <div class="text-sm opacity-90">Solução de gestão condominial</div>
+          </div>
+        </div>
+        <div class="text-sm opacity-90">&copy; 2025 Condo Connect. Todos os direitos reservados.</div>
+      </div>
+    </footer>
+
+  </main>
+  <script src="../static/js/index.js"></script>
+</body>
+</html>

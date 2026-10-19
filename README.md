@@ -1,7 +1,12 @@
-# **CondoConnect - API**
+# Condo Connect | Sistema Monolítico
 
-API para gestão de **usuários**, **avisos** e **chamados** do condomínio.
-Desenvolvida em **Flask**, com autenticação via **Flask-Login**, validações com **Marshmallow**, ORM **SQLAlchemy** e migrações com **Flask-Migrate**.
+Aplicação web monolítica para gestão de condomínios, com interface e API integradas no mesmo projeto Flask. O sistema reúne autenticação, perfis, avisos e chamados para síndicos e moradores.
+
+## Visão Geral
+
+O Condo Connect facilita a administração do condomínio e a comunicação entre síndicos, moradores e prestadores de serviço. A interface responsiva foi desenvolvida com foco em clareza, usabilidade e performance, usando HTML, CSS, TailwindCSS e JavaScript. A versão de interface foi concebida como uma base com componentes reutilizáveis e agora é servida pelo mesmo backend que fornece os dados.
+
+![Preview da landing page](app/static/img/imagem_condoC.png)
 
 ---
 
@@ -27,11 +32,13 @@ Desenvolvida em **Flask**, com autenticação via **Flask-Login**, validações 
 * Editar perfil (nome, email, telefone, bloco/apto e senha)
 * Ver apenas os próprios chamados
 * Ver avisos ativos
+* Não pode acessar o sistema enquanto a conta estiver desativada
 
 ### Síndico:
 
 * Tudo que o morador pode
 * Listar todos os usuários do sistema
+* Ativar e desativar usuários
 * Criar, editar e desativar avisos
 * Alterar o status de qualquer chamado
 
@@ -77,6 +84,7 @@ Desenvolvida em **Flask**, com autenticação via **Flask-Login**, validações 
 | Ver chamados      | Apenas dele | Todos     |
 | Alterar status    | ✖           | ✔         |
 | Listar usuários   | ✖           | ✔         |
+| Ativar/desativar usuários | ✖   | ✔         |
 
 ---
 
@@ -88,6 +96,10 @@ Desenvolvida em **Flask**, com autenticação via **Flask-Login**, validações 
 * SQLAlchemy
 * Marshmallow
 * Flask-Migrate
+* HTML5
+* CSS3
+* TailwindCSS
+* JavaScript
 
 ---
 
@@ -100,6 +112,7 @@ app/
  │   ├── auth_controller.py
  │   ├── aviso_controller.py
  │   ├── chamado_controller.py
+ │   ├── pages_controller.py
  │   └── user_controller.py
  ├── models/
  │   ├── aviso_model.py
@@ -114,10 +127,21 @@ app/
  │   ├── aviso_service.py
  │   ├── chamado_service.py
  │   └── user_service.py
+ ├── static/
+ │   ├── css/
+ │   ├── img/
+ │   └── js/
+ ├── templates/
+ │   ├── index.html
+ │   └── login_dash.html
  ├── __init__.py
  ├── config.py
  └── ...
+migrations/
+ └── versions/
 ```
+
+Os templates e arquivos estáticos são servidos pelo Flask. A landing page está em `/` e o painel de login e gestão está em `/login_dash`.
 
 ---
 
@@ -126,9 +150,9 @@ app/
 ### 1. Criar ambiente virtual
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # Linux
-venv\Scripts\activate     # Windows
+python -m venv .venv
+source .venv/bin/activate  # Linux
+.venv\Scripts\activate    # Windows
 ```
 
 ### 2. Instalar dependências
@@ -139,7 +163,7 @@ pip install -r requirements.txt
 
 ### 3. Configurar variáveis de ambiente
 
-Crie um `.env`:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```
 FLASK_ENV=development
@@ -147,11 +171,11 @@ SECRET_KEY=uma_senha_segura
 DATABASE_URL=sqlite:///data.db
 ```
 
-### 4. Inicializar o banco
+### 4. Aplicar as migrações do banco
+
+Não é necessário executar `flask db init` nem `flask db migrate`. Para aplicar as migrações existentes:
 
 ```bash
-flask db init
-flask db migrate
 flask db upgrade
 ```
 
@@ -160,6 +184,8 @@ flask db upgrade
 ```bash
 flask run
 ```
+
+Acesse `http://127.0.0.1:5000/` para abrir a landing page ou `http://127.0.0.1:5000/login_dash` para acessar o painel. Não abra os templates HTML diretamente no navegador: eles dependem das rotas e dos arquivos estáticos servidos pelo Flask.
 
 ---
 
@@ -189,6 +215,7 @@ flask run
 | Método | URL             | Descrição                |
 | ------ | -------------   | ------------------------ |
 | GET    | /admin/usuarios | Listar todos os usuários |
+| PATCH  | /admin/usuarios/{id} | Ativar ou desativar usuário |
 
 ---
 
@@ -217,3 +244,12 @@ flask run
 ## 📄 Licença
 
 Este projeto está licenciado sob os termos da [Licença MIT](./LICENSE), com cláusula adicional de atribuição.
+
+## Equipe
+
+| Membro | Função | Perfil |
+|:--|:--|:--|
+| **Ivyson Thauan** | Gerente | [GitHub](https://github.com/ivysonin) |
+| **Bárbara Siqueira** | Analista de Dados | [GitHub](https://github.com/barbaraspa) |
+| **José Pedro** | Designer | [GitHub](https://github.com/zepreda) |
+| **Paulo Henrique** | Dev Full-Stack | [GitHub](https://github.com/Henrique8350) |

@@ -1,0 +1,82 @@
+:root{
+    --bg: #fcfdfd;
+    --surface: #c4e4ce;
+    --text-primary: #3e9a91;
+    --action: #6ec065;
+    --action-2: #97cea2;
+}
+html,body{height:100%;}
+body{
+    margin:0;
+    font-family:"Poppins",sans-serif;
+    background:var(--bg);
+    color:#07251f;
+    -webkit-font-smoothing:antialiased;
+}
+
+/* Header Glass full width */
+header{
+    position:fixed;
+    top:0;left:0;right:0;
+    width:100%;
+    z-index:60;
+    background:rgba(255,255,255,0.25);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+/* Hero */
+.hero-bg{
+    background-image:url('../img/condominios.jpg');
+    background-size:cover;
+    background-position:center;
+    position:absolute;inset:0;z-index:0;
+}
+.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.35);z-index:1;}
+.hero-content{ position:relative; z-index:10; }
+
+.glass-card{
+    background:rgba(255,255,255,0.9);
+    border:1px solid rgba(10,40,35,0.04);
+    backdrop-filter:blur(8px);
+    box-shadow:0 10px 30px rgba(10,40,35,0.06);
+}
+
+/* Carrossel */
+#carousel {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 2rem 0;
+    -webkit-overflow-scrolling: touch;
+}
+#carousel::-webkit-scrollbar { display: none; }
+/* two items per view on desktop */
+#carousel > .card {
+    flex: 0 0 calc(50% - 0.75rem);
+    scroll-snap-align: start;
+}
+@media (max-width: 1024px) {
+    #carousel > .card { flex: 0 0 calc(60%); }
+}
+@media (max-width: 768px) {
+    #carousel > .card { flex: 0 0 90%; }
+}
+
+/* Depoimentos inline auto-scroll (keeps simple) */
+.testimonial-track {
+    display:flex;
+    gap:1rem;
+    animation: scrollTestimonials 22s linear infinite;
+    will-change: transform;
+}
+.testimonial-track:hover { animation-play-state: paused; }
+@keyframes scrollTestimonials {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Small niceties */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }

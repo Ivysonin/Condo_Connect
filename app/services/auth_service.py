@@ -19,6 +19,9 @@ class AuthService:
         if not user:
             return {"error": "Usuário não encontrado"}, 404
 
+        if not user.ativo:
+            return {"error": "Usuário desativado"}, 403
+
         if not check_password_hash(user.senha_hash, senha):
             return {"error": "Senha incorreta"}, 401
 

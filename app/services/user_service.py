@@ -56,7 +56,8 @@ class UserService:
             bloco_apto=data["bloco_apto"],
             telefone=data["telefone"],
             tipo_usuario=data["tipo_usuario"],
-            senha_hash=generate_password_hash(data["senha"])
+            senha_hash=generate_password_hash(data["senha"]),
+            ativo=True
         )
 
         db.session.add(user)
@@ -133,3 +134,17 @@ class UserService:
 
         db.session.commit()
         return {"message": "Usuário atualizado com sucesso"}, 200
+
+    @staticmethod
+    def update_status(user_id, ativo, requesting_user):
+        user = db.session.get(User, user_id)
+
+        if not user:
+            return {"error": "Usuário não encontrado"}, 404
+
+        if user.id == requesting_user.id and not ativo:
+            return {"error": "Não é possível desativar o próprio usuário"}, 400
+
+        user.ativo = ativo
+        db.session.commit()
+        return {"message": "Status do usuário atualizado", "ativo": user.ativo}, 200
